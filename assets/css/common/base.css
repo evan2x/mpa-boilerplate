@@ -1,0 +1,21 @@
+body {
+  background-color: #f6f6f5;
+  color: #333;
+}
+
+a {
+  color: inherit;
+}
+
+.container {
+  padding: 10px 0;
+}
+
+[v-cloak] {
+  display: none;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+  outline: 0
+}

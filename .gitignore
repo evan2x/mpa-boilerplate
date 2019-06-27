@@ -1,0 +1,10 @@
+.DS_Store
+npm-debug.log
+yarn-error.log
+rev-manifest.json
+node_modules/
+dist/
+logs/
+WEB-INF/
+.history/
+.vscode
