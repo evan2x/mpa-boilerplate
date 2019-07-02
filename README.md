@@ -1,4 +1,4 @@
-Multi-page application boilerplate
+# Multi-page application boilerplate
 
 [![Badge](https://img.shields.io/badge/node.js->=_8.9.0-brightgreen.svg?style=flat)]()
 [![David](https://img.shields.io/david/dev/evan2x/mpa-boilerplate.svg)]()
