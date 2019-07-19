@@ -15,6 +15,10 @@
         list-style: none;
       }
 
+      svg {
+        max-width: 100%;
+      }
+
       .header {
         background-color: #f1f1f1;
         padding: 10px 0;
@@ -40,6 +44,10 @@
             -ms-flex-wrap: wrap;
                 flex-wrap: wrap;
         padding-right: 10px;
+      }
+
+      .symbol-icon {
+        text-align: center;
       }
 
       .symbol-use > pre {
@@ -77,57 +85,26 @@
         margin: 10px;
       }
     </style>
-    <style>
-       {
-        width: 48px;
-        height: 48px;
-        fill: #555;
-      }
-      
-       {
-        width: 48px;
-        height: 48px;
-        fill: #555;
-      }
-      
-      
-    </style>
+    <script src="icon-symbols.js"></script>
   </head>
   <body>
     <header class="header">
-      <h1>SVG Symbols <span class="symbol-length">(symbols: 2)</span></h1>
+      <h1>SVG Symbols <span class="symbol-length">(symbols: 1)</span></h1>
     </header>
     <ul class="symbol-list">
       
       <li>
         <div class="symbol-icon">
-          <svg role="img" class="arrow-right">
-            <use xlink:href="/assets/symbol/icon-symbols.svg#arrow-right"></use>
+          <svg>
+            <use xlink:href="#icon-right-circle"></use>
           </svg>
         </div>
-        <span class="symbol-name">arrow-right</span>
+        <span class="symbol-name">icon-right-circle</span>
         <div class="symbol-use">
           <span class="symbol-use-title">Usage</span>
 <pre>
-<code>&lt;svg role=&quot;img&quot; class=&quot;arrow-right&quot;&gt;
-  &lt;use xlink:href=&quot;/assets/symbol/icon-symbols.svg#arrow-right&quot;&gt;&lt;/use&gt;
-&lt;/svg&gt;</code>
-</pre>
-        </div>
-      </li>
-      
-      <li>
-        <div class="symbol-icon">
-          <svg role="img" class="right-circle">
-            <use xlink:href="/assets/symbol/icon-symbols.svg#right-circle"></use>
-          </svg>
-        </div>
-        <span class="symbol-name">right-circle</span>
-        <div class="symbol-use">
-          <span class="symbol-use-title">Usage</span>
-<pre>
-<code>&lt;svg role=&quot;img&quot; class=&quot;right-circle&quot;&gt;
-  &lt;use xlink:href=&quot;/assets/symbol/icon-symbols.svg#right-circle&quot;&gt;&lt;/use&gt;
+<code>&lt;svg&gt;
+  &lt;use xlink:href=&quot;#icon-right-circle&quot;&gt;&lt;/use&gt;
 &lt;/svg&gt;</code>
 </pre>
         </div>
