@@ -148,12 +148,12 @@ module.exports = {
    * 图标生成器配置
    */
   iconBuilder: {
-    src: 'icon/**/*.svg',
     /**
      * svg symbols配置项
      * @type {Object}
      */
     symbols: {
+      src: 'icon/symbols/**/*.svg',
       dest: path.join(context, 'symbol'),
       /**
        * 输出文件名
@@ -171,6 +171,7 @@ module.exports = {
      * @type {Object}
      */
     iconfont: {
+      src: 'icon/fonts/**/*.svg',
       dest: path.join(context, 'font'),
       /**
        * iconfont

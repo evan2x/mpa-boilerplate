@@ -15,6 +15,10 @@
         list-style: none;
       }
 
+      svg {
+        max-width: 100%;
+      }
+
       .header {
         background-color: #f1f1f1;
         padding: 10px 0;
@@ -40,6 +44,10 @@
             -ms-flex-wrap: wrap;
                 flex-wrap: wrap;
         padding-right: 10px;
+      }
+
+      .symbol-icon {
+        text-align: center;
       }
 
       .symbol-use > pre {
@@ -77,15 +85,7 @@
         margin: 10px;
       }
     </style>
-    <style>
-      <% _.each( icons, function( icon ){ %><%= icon.className %> {
-        width: <%= icon.width %>;
-        height: <%= icon.height %>;
-        fill: #555;
-      }
-      <%= icon.style %>
-      <% }); %>
-    </style>
+    <script src="icon-symbols.js"></script>
   </head>
   <body>
     <header class="header">
@@ -95,16 +95,16 @@
       <% _.each(icons, function(icon){ %>
       <li>
         <div class="symbol-icon">
-          <svg role="img" class="<%= icon.id %>">
-            <use xlink:href="<%= icon.filePath %>#<%= icon.id %>"></use>
+          <svg>
+            <use xlink:href="#<%= icon.id %>"></use>
           </svg>
         </div>
         <span class="symbol-name"><%= icon.id %></span>
         <div class="symbol-use">
           <span class="symbol-use-title">Usage</span>
 <pre>
-<code><%= _.escape('<svg role="img" class="') %><%= icon.id %><%= _.escape('">') %>
-  <%= _.escape('<use xlink:href="') %><%= icon.filePath %>#<%= icon.id %><%= _.escape('"></use>') %>
+<code><%= _.escape('<svg>') %>
+  <%= _.escape('<use xlink:href="') %>#<%= icon.id %><%= _.escape('"></use>') %>
 <%= _.escape('</svg>') %></code>
 </pre>
         </div>

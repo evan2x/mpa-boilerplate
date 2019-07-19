@@ -170,17 +170,19 @@ module.exports = {
 module.exports = {
   iconBuilder: {
     docDir: './docs',
-    // 图标原文件，通常是svg文件
-    src: 'icon/**/*.svg',
     symbols: {
+      // 图标原文件，通常是svg文件
+      src: 'icon/symbols/**/*.svg',
       // SVG Symbols，默认生成到资源目录下的symbol目录
       dest: path.join(context, 'symbol'),
       // SVG Symbols 文件名，不需要写后缀
-      name: 'svg-symbols',
+      name: 'icon-symbols',
       // 使用文档输出路径
       doc: './docs/svg-symbols/demo.html'
     },
     iconfont: {
+      // 图标原文件，通常是svg文件
+      src: 'icon/fonts/**/*.svg',
       // iconfont，默认生成到资源目录下的font目录
       dest: path.join(context, 'font'),
       // iconfont 文件名，不需要写后缀
@@ -193,6 +195,42 @@ module.exports = {
   }
 }
 ```
+
+### svg symbols使用方式
+
+在需要使用svg symbols的页面中引入通过`npm run symbols:gen`命令生成的脚本文件
+
+```html
+<!-- build:js /assets/symbols/icon-symbols.js -->
+<script src="/assets/symbol/icon-symbols.js"></script>
+<!-- endbuild -->
+```
+
+然后使用如下代码来引用图标：
+
+```xml
+<svg role="img">
+  <use xlink:href="#icon-图标名称"></use>
+</svg>
+```
+
+### iconfont使用方式
+
+在吸引使用iconfont的页面中引入通过`npm run iconfont:gen`命令生成的样式文件
+
+```html
+<!-- build:css /assets/css/iconfont.css -->
+<link rel="stylesheet" href="/assets/css/iconfont.css">
+<!-- endbuild -->
+```
+
+然后使用如下代码来引用图标：
+
+```html
+<span class="icon-图标名称"></span>
+```
+
+**这两个命令会在项目目录下生成`docs`目录用于存放图标的使用文档。**
 
 ## 模版
 

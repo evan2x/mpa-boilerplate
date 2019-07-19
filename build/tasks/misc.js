@@ -6,56 +6,55 @@ const filter = require('gulp-filter');
 const rename = require('gulp-rename');
 const iconfont = require('gulp-iconfont');
 const consolidate = require('gulp-consolidate');
+const postcss = require('postcss');
 
 module.exports = function (config) {
   const icon = config.iconBuilder;
 
   function symbolsGenerate() {
     const { symbols } = icon;
-    const name = `${symbols.name}.svg`;
+    const name = `${symbols.name}.js`;
+    const symbolTmpl = path.resolve(__dirname, '../templates/svg-symbols.js');
     const tmpl = path.resolve(__dirname, '../templates/svg-symbols.html');
-    const SVGFilter = filter(file => /\.svg$/.test(file.path), {
+    const SymbolFilter = filter(file => /\.js$/.test(file.path), {
       restore: true
     });
     const HTMLFilter = filter(file => /\.html$/.test(file.path), {
       restore: true
     });
 
-    return gulp.src(icon.src)
+    return gulp.src(symbols.src)
       .pipe(cheerio({
         run($) {
-          $('style').remove();
-          $('[class]').removeAttr('class');
-          $('[id]').removeAttr('id');
-          $('[fill]').removeAttr('fill');
-          $('[stroke]').removeAttr('stroke');
+          const style = $('style').text();
+
+          postcss.parse(style).walkDecls(delc => {
+            if (delc.parent) {
+              $(delc.parent.selector).attr('style', delc.toString()).removeAttr('class');
+            }
+          });
         },
         parserOptions: {
           xmlMode: true
         }
       }))
       .pipe(svgSymbols({
-        templates: ['default-svg', tmpl],
-        transformData(svg, data) {
-          let filePath = path.posix.join(symbols.dest, name);
-
-          if (!filePath.startsWith('/')) {
-            filePath = `/${filePath}`;
-          }
+        templates: [symbolTmpl, tmpl],
+        transformData(_, defaultData) {
+          const prefix = 'icon-';
 
           return {
-            id: data.id,
-            className: data.className,
-            width: '48px',
-            height: '48px',
-            filePath
-          };
+            ...defaultData,
+            id: prefix + defaultData.id,
+            class: defaultData.class.slice(0,1) + prefix + defaultData.class.slice(1)
+          }
         }
       }))
-      .pipe(SVGFilter)
+      .pipe(SymbolFilter)
       .pipe(rename(name))
       .pipe(gulp.dest(symbols.dest))
-      .pipe(SVGFilter.restore)
+      .pipe(gulp.dest(path.dirname(symbols.doc)))
+      .pipe(SymbolFilter.restore)
       .pipe(HTMLFilter)
       .pipe(rename(path.basename(symbols.doc)))
       .pipe(gulp.dest(path.dirname(symbols.doc)));
@@ -69,7 +68,7 @@ module.exports = function (config) {
       html: path.resolve(__dirname, '../templates/iconfont.html')
     };
 
-    return gulp.src(icon.src)
+    return gulp.src(font.src)
       .pipe(iconfont({
         fontName: font.name,
         formats: font.formats,
