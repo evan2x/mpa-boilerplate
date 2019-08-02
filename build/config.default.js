@@ -16,6 +16,34 @@ module.exports = {
     path: './dist',
     publicPath: ''
   },
+  /** 
+   * 内置的node服务
+   */
+  server: {
+    /**
+     * 端口号
+     * @type {Number}
+     */
+    port: 8060,
+    /**
+     * 模版目录
+     * @type {String}
+     */
+    view: 'views/',
+    /**
+     * 公共资源访问路径与目录映射
+     * @type {String}
+     */
+    public: {
+      '/assets': 'assets/',
+      '/dist/assets': 'dist/assets/'
+    },
+    /**
+     * 代理配置，与webpack-dev-server的proxy配置相同
+     * @see https://webpack.js.org/configuration/dev-server/#devserverproxy
+     */
+    proxy: {} 
+  },
   /**
    * 资源配置
    * @todo 大部分资源都会有`src`和`dest`属性, 其中`src`相对于`assets.context`，而`dest`相对于`output.path`
