@@ -9,6 +9,9 @@
 # 开发环境 启用watch对脚本和样式文件进行编译
 npm run watch
 
+# 启动默认的dev server以及执行npm run watch
+npm run dev
+
 # 生产环境 构建项目
 npm run build
 
@@ -40,8 +43,33 @@ module.exports = {
 }
 ```
 
-> `output.path` 指定了所有资源打包后输出的目录。  
-`output.publicPath` 用于指定静态资源访问时的前缀或者是静态资源服务器地址。
+* `output.path` 指定了所有资源打包后输出的目录。  
+* `output.publicPath` 用于指定静态资源访问时的前缀或者是静态资源服务器地址。
+
+### server 配置
+
+启动默认的开发服务器，该服务器仅用于访问静态资源以及代理接口。如果你的模版不是静态的HTML，而是语言相关的模版，请不要使用该服务，因为其不具备模版解析功能。
+
+```js
+module.exports = {
+  server: {
+    port: 8060,
+    view: 'views/',
+    public: {
+      '/assets': 'assets/',
+      '/dist/assets': 'dist/assets/'
+    },
+    proxy: {} 
+  }
+}
+```
+
+以上为默认配置项，您可以在`build.config.js`中进行修改
+
+* `server.port` 服务的端口号
+* `server.view` 该服务访问的模版目录
+* `server.public` 公共资源访问的路径与目录的映射关系
+* `server.proxy` 代理配置，与webpack-dev-server的proxy配置一致，具体使用方式请点击这里[proxy](https://webpack.js.org/configuration/dev-server/#devserverproxy)
 
 ### assets 配置
 
