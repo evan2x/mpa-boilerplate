@@ -35,10 +35,12 @@ module.exports = function (config, postcssConfig, debug) {
               loader: 'css-loader',
               options: {
                 importLoaders: 1,
-                modules: script.cssModules,
+                modules: script.cssModules ? {
+                  mode: 'local',
+                  localIdentName: '[name]__[local]--[hash:base64:5]'
+                } : false,
                 sourceMap: debug,
-                camelCase: true,
-                localIdentName: '[name]__[local]--[hash:base64:5]'
+                localsConvention: 'camelCaseOnly'
               }
             },
             {

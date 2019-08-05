@@ -12,7 +12,7 @@ const log = require('fancy-log');
 const chalk = require('chalk');
 const figures = require('figures');
 const prettyTime = require('pretty-time');
-// const childProcess = require('child_process');
+const childProcess = require('child_process');
 const useref = require('gulp-useref');
 const inlinesource = require('gulp-inline-source');
 const filter = require('gulp-filter');
@@ -35,6 +35,7 @@ module.exports = function (config, debug) {
   const webpackVendorConfig = getWebpackVendorConfig(assets.script, debug);
   const webpackConfig = getWebpackConfig(config, postcssConfig, debug);
   const resolveAsset = util.assetResolver(context, outputDir);
+  const watched = { script: false, style: false };
   let watchMode = process.env.WATCH_MODE === 'true';
 
   /**
@@ -312,41 +313,38 @@ module.exports = function (config, debug) {
    * 启动 watch 模式
    * @type {Task}
    */
-  function watch() {
+  function watch(done) {
+    const finish = () => {
+      if (_.isFunction(done) && watched.script && watched.style) {
+        done();
+      }
+    };
+
+    // enable watch mode
     watchMode = true;
 
     // style watch
     const styleGlob = util.joinContextToGlob(context, assets.style.src);
 
     log(`Watching '${chalk.cyan('style')}'...`);
-    style();
+    style().once('finish', () => {
+      watched.style = true;
+      finish();
+    });
 
     gulp.watch(styleGlob).on('all', () => {
       style();
     });
-
-    /* const packager = childProcess.spawn('npm', ['run', 'exec', 'script'], {
-      env: Object.assign({
-        WATCH_MODE: 'true'
-      }, process.env),
-      stdio: ['inherit', 'inherit', 'inherit'],
-      windowsHide: true
-    });
-
-    packager.on('close', (code) => {
-      done();
-    }); */
-
-    /* gulp.watch(scriptGlob).on('add', () => {
-
-    }); */
 
     // script watch
     const scriptGlob = util.joinContextToGlob(context, assets.script.src);
     const entry2name = util.getNameByEntry(scriptGlob);
 
     log(`Watching '${chalk.cyan('script')}'...`);
-    let watching = script();
+    let watching = script(() => {
+      watched.script = true;
+      finish();
+    });
 
     gulp.watch(scriptGlob).on('add', (entry) => {
       const { compiler } = watching;
@@ -365,6 +363,19 @@ module.exports = function (config, debug) {
     });
   }
 
+  function server() {
+    let started = false;
+
+    watch(() => {
+      if (!started) {
+        childProcess.spawn('node', ['build/server.js'], {
+          stdio: 'inherit'
+        });
+        started = true;
+      }
+    });
+  }
+
   return {
     clean,
     vendor,
@@ -374,6 +385,7 @@ module.exports = function (config, debug) {
     tmpl,
     copies,
     watch,
+    server,
     replaceRefs
   };
 };

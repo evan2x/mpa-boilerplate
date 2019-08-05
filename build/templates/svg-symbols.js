@@ -1,16 +1,17 @@
-(function(doc) {
-  var fragment = '<svg<%= attributesToString(svgAttrs) %>><% if (defs) { %><defs><%= defs.trim() %></defs><% } %><%= icons.map(function(icon) { return svgdataToSymbol(icon).replace(/\s*[\r\n]\s*/g, "").replace(/>\s*</g, "><"); }).join("") %></svg>';
+(function (doc) {
+  // eslint-disable-next-line
+  let fragment = '<svg<%= attributesToString(svgAttrs) %>><% if (defs) { %><defs><%= defs.trim() %></defs><% } %><%= icons.map(function(icon) { return svgdataToSymbol(icon).replace(/\s*[\r\n]\s*/g, "").replace(/>\s*</g, "><"); }).join("") %></svg>';
   function insert() {
-    var container = doc.createElement('div');
+    let container = doc.createElement('div');
 
     container.innerHTML = fragment;
     fragment = null;
 
-    var svg = container.getElementsByTagName('svg')[0];
+    let svg = container.getElementsByTagName('svg')[0];
     svg.style.cssText = 'position: absolute; display: none;';
-    svg.setAttribute("aria-hidden", "true");
-    
-    var firstChild = doc.body.firstChild;
+    svg.setAttribute('aria-hidden', 'true');
+
+    let { firstChild } = doc.body;
 
     if (firstChild) {
       firstChild.parentNode.insertBefore(svg, firstChild);
@@ -27,4 +28,4 @@
   }
 
   doc.addEventListener('DOMContentLoaded', handler, false);
-})(document);
+}(document));

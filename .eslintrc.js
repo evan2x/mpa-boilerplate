@@ -37,6 +37,6 @@ module.exports = {
     serviceworker: true
   },
   globals: {
-    '__GLOBAL_CONFIG__': OFF
+    '__GLOBAL_CONFIG__': 'readonly'
   }
 }

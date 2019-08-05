@@ -11,6 +11,7 @@ const {
   tmpl,
   copies,
   watch,
+  server,
   replaceRefs
 } = require('./tasks/general')(config, process.env.NODE_ENV !== 'production');
 const {
@@ -36,19 +37,6 @@ imageRev.displayName = 'image:rev';
 copiesRev.displayName = 'copies:rev';
 tmplRev.displayName = 'tmpl:rev';
 
-/* exports.script = script;
-exports.style = style;
-exports.tmpl = tmpl;
-exports.replaceRefs = replaceRefs;
-exports.image = image;
-
-exports.cleanRevManifest = cleanRevManifest;
-exports.scriptRev = scriptRev;
-exports.styleRev = styleRev;
-exports.imageRev = imageRev;
-exports.copiesRev = copiesRev;
-exports.tmplRev = tmplRev; */
-
 const build = gulp.series(
   clean,
   vendor,
@@ -73,4 +61,5 @@ exports.iconfontGenerate = iconfontGenerate;
 exports.clean = clean;
 exports.vendor = vendor;
 exports.watch = watch;
+exports.server = server;
 exports.build = build;

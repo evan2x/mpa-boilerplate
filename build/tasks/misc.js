@@ -28,7 +28,7 @@ module.exports = function (config) {
         run($) {
           const style = $('style').text();
 
-          postcss.parse(style).walkDecls(delc => {
+          postcss.parse(style).walkDecls((delc) => {
             if (delc.parent) {
               $(delc.parent.selector).attr('style', delc.toString()).removeAttr('class');
             }
@@ -46,8 +46,8 @@ module.exports = function (config) {
           return {
             ...defaultData,
             id: prefix + defaultData.id,
-            class: defaultData.class.slice(0,1) + prefix + defaultData.class.slice(1)
-          }
+            class: defaultData.class.slice(0, 1) + prefix + defaultData.class.slice(1)
+          };
         }
       }))
       .pipe(SymbolFilter)
