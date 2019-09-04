@@ -134,7 +134,16 @@ module.exports = {
 }
 ```
 
-> 默认情况下，只打包`@babel/polyfill`，该模块会强制被打包到vendor包中，**若引入的第三方模块是按需加载的模块，则不应配置在此处**
+* 注意事项：
+  - **若引入的第三方模块是按需加载的模块，则不应配置在此处**
+  - `core-js/stable`和`regenerator-runtime/runtime`模块会强制被打包到vendor包中
+  - 在vendor中对于`moment`模块而言，`locale`下的文件是不会被打包的，如果您需要的话，则可以在需要的模块中手动导入，例如：
+
+  ```js
+    import moment from 'moment';
+    // 手动导入
+    import 'moment/locale/zh-cn';
+  ```
 
 * `assets.script.alias` 用于设置路径引用时的别名，默认是以下配置：
 
@@ -282,7 +291,6 @@ module.exports = {
   <link rel="stylesheet" href="/assets/css/iconfont.css">
   <link rel="stylesheet" href="/dist/assets/css/common/base.css">
   <link rel="stylesheet" href="/dist/assets/css/common.css">
-  <link rel="stylesheet" href="/dist/assets/css/vue-components.css">
   <!-- endbuild -->
   $!{head}
 </head>
@@ -297,7 +305,6 @@ module.exports = {
   <!-- endbuild -->
   <!-- build:js /assets/js/common.js -->
   <script src="/dist/assets/js/common.js"></script>
-  <script src="/dist/assets/js/vue-components.js"></script>
   <!-- endbuild -->
   #end
   $!{bodyScript}

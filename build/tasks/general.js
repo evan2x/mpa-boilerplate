@@ -31,8 +31,9 @@ const getPostcssConfig = require('../postcss.config');
 
 module.exports = function (config, debug) {
   const { output: { path: outputDir, publicPath }, assets, assets: { context } } = config;
+  const baseModules = ['core-js/stable', 'regenerator-runtime/runtime'];
   const postcssConfig = getPostcssConfig(config, debug);
-  const webpackVendorConfig = getWebpackVendorConfig(assets.script, debug);
+  const webpackVendorConfig = getWebpackVendorConfig(assets.script, debug, baseModules);
   const webpackConfig = getWebpackConfig(config, postcssConfig, debug);
   const resolveAsset = util.assetResolver(context, outputDir);
   const watched = { script: false, style: false };
@@ -72,7 +73,7 @@ module.exports = function (config, debug) {
     const { globs, out } = resolveAsset(assets.script);
 
     webpackConfig.watch = watchMode;
-    webpackConfig.entry = util.webpackEntries(globs);
+    webpackConfig.entry = util.webpackEntries(globs, baseModules);
     webpackConfig.output.path = path.resolve(out);
 
     return webpack(webpackConfig, (err, stats) => {

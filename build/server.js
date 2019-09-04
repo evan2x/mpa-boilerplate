@@ -26,6 +26,8 @@ function traverseObject(o, iterator) {
   });
 }
 
+app.use(compression());
+
 traverseObject(serverConfig.public, (key, value) => {
   app.use(key, express.static(value));
 });
@@ -35,8 +37,6 @@ app.use(express.static(serverConfig.view));
 traverseObject(serverConfig.proxy, (key, value) => {
   app.use(key, proxy(value));
 });
-
-app.use(compression());
 
 app.listen(PORT, '0.0.0.0', () => {
   console.info(`Server is running here: ${chalk.cyan(`http://127.0.0.1:${chalk.bold(PORT)}`)}`)

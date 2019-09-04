@@ -170,7 +170,7 @@ function getNameByEntry(globs) {
  * @param {String|Array<String>} globs
  * @return {Object}
  */
-function webpackEntries(globs) {
+function webpackEntries(globs, baseModules = []) {
   const entries = glob.sync(globs, {
     matchBase: true
   });
@@ -179,7 +179,7 @@ function webpackEntries(globs) {
   return entries.reduce((acc, entry) => {
     name = entry2name(entry);
 
-    acc[name] = ['core-js/stable', 'regenerator-runtime/runtime', path.resolve(entry)];
+    acc[name] = baseModules.concat([path.resolve(entry)]);
     return acc;
   }, {});
 }

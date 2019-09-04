@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Toast } from 'vant';
+// import { Toast } from 'vant';
 import qs from 'querystring';
 import { isPlainObject } from 'lodash';
 
@@ -53,7 +53,7 @@ instance.interceptors.response.use((response) => {
 
     error.name = BIZ_ERROR;
     error.response = response;
-    Toast.fail(result.msg || ' 未知错误');
+    // Toast.fail(result.msg || ' 未知错误');
 
     if (process.env.NODE_ENV === 'development') {
       outputError(error);

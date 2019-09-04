@@ -2,10 +2,10 @@ const path = require('path');
 const webpack = require('webpack');
 const WebpackBar = require('webpackbar');
 
-module.exports = function (config, debug) {
+module.exports = function (config, debug, baseModules = []) {
   return {
     entry: {
-      [config.vendor.name]: ['core-js/stable', 'regenerator-runtime/runtime'].concat(config.vendor.modules)
+      [config.vendor.name]: baseModules.concat(config.vendor.modules)
     },
     devtool: debug ? 'cheap-module-inline-source-map' : 'none',
     output: {

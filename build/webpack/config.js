@@ -67,35 +67,8 @@ module.exports = function (config, postcssConfig, debug) {
         cacheGroups: {
           common: {
             name: script.commonChunkName,
-            test: /\.js$/,
             chunks: 'all',
             minChunks: 2,
-            enforce: true,
-            reuseExistingChunk: true
-          },
-          commonStyle: {
-            name: script.commonChunkName,
-            test: /\.css$/,
-            chunks: 'all',
-            minChunks: 1,
-            enforce: true,
-            reuseExistingChunk: true
-          },
-          vue: {
-            name: script.vueChunkName,
-            test: m => m.nameForCondition && /\.vue$/.test(m.nameForCondition()) && /^javascript/.test(m.type),
-            chunks: 'all',
-            priority: 10,
-            minChunks: 2,
-            enforce: true,
-            reuseExistingChunk: true
-          },
-          vueStyle: {
-            name: script.vueChunkName,
-            test: m => m.nameForCondition && /\.vue$/.test(m.nameForCondition()) && !/^javascript/.test(m.type),
-            chunks: 'all',
-            priority: 10,
-            minChunks: 1,
             enforce: true,
             reuseExistingChunk: true
           }

@@ -100,11 +100,6 @@ module.exports = {
        */
       commonChunkName: 'common',
       /**
-       * Vue SFC模块名称
-       * @todo 该模块用于提取Vue SFC中复用的模块，Vue SFC中的样式将提取到 `style.dest` 指定的目录下，样式文件名与模块名相同
-       */
-      vueChunkName: 'vue-components',
-      /**
        * 是否开启 css modules
        */
       cssModules: true,

@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import axios from 'axios';
+import axios from '@/js/shared/axios';
 import Example from '@/components/example.vue';
 
 axios.get('/github/api/users/evan2x');
