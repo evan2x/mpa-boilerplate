@@ -136,9 +136,7 @@ module.exports = function (config, debug) {
         imagemin.jpegtran(),
         imagemin.optipng(),
         imagemin.svgo()
-      ], {
-        verbose: true
-      })))
+      ])))
       .pipe(gulp.dest(out));
   }
 
@@ -288,24 +286,27 @@ module.exports = function (config, debug) {
    * @type {Task}
    */
   function replaceRefs() {
-    const globs = _.flatten([
-      `${path.dirname(assets.script.src)}/*${path.extname(assets.script.src)}`,
+    const script = `${path.dirname(assets.script.src)}/*${path.extname(assets.script.src)}`;
+    const sourceGlobs = _.flatten([
+      script,
       assets.style,
       assets.image,
       ...assets.copies
     ].map(item => path.join(context, item.src || item)));
-    const manifest = util.createReplacementManifest(globs, {
+    const manifest = util.createReplacementManifest(sourceGlobs, {
       cwd: path.resolve(outputDir),
       publicPath
     });
-
-    return gulp.src(_.flatten([
-      globs,
-      path.join(context, assets.template.src)
-    ]), {
-      cwd: path.resolve(outputDir),
-      base: outputDir
-    })
+    const globs = _.flatten([
+      script,
+      assets.style,
+      assets.template
+    ]).map(item => path.join(context, item.src || item));
+    
+    return gulp.src(globs, {
+        cwd: path.resolve(outputDir),
+        base: outputDir
+      })
       .pipe(replace(manifest))
       .pipe(gulp.dest(outputDir));
   }

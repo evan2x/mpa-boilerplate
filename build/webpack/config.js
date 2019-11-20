@@ -71,6 +71,23 @@ module.exports = function (config, postcssConfig, debug) {
             minChunks: 2,
             enforce: true,
             reuseExistingChunk: true
+          },
+          commonStyle: {
+            name: script.commonChunkName,
+            test: m => {
+              if (m.nameForCondition) {
+                const name = m.nameForCondition();
+                
+                return /\.css$/.test(name) || (/\.vue$/.test(name) && !/^javascript/.test(m.type))
+              }
+
+              return false;
+            },
+            chunks: 'all',
+            minChunks: 1,
+            priority: 10,
+            enforce: true,
+            reuseExistingChunk: true
           }
         }
       },
