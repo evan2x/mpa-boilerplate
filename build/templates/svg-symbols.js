@@ -8,7 +8,7 @@
     fragment = null;
 
     let svg = container.getElementsByTagName('svg')[0];
-    svg.style.cssText = 'position: absolute; display: none;';
+    svg.style.cssText = 'position: absolute; width: 0px; height: 0px; overflow: hidden;';
     svg.setAttribute('aria-hidden', 'true');
 
     let { firstChild } = doc.body;

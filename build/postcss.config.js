@@ -25,7 +25,7 @@ module.exports = function (config, debug, imageWalker) {
   return {
     plugins: [
       atImport({
-        root: config.assets.context
+        path: config.assets.context
       }),
       willChange(),
       nested(),
