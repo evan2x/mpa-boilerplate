@@ -8,7 +8,7 @@ const WebpackBar = require('webpackbar');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 module.exports = function (config, postcssConfig, debug) {
-  const { assets: { script, style } } = config;
+  const { assets, assets: { script, style } } = config;
 
   return {
     output: {
@@ -21,6 +21,13 @@ module.exports = function (config, postcssConfig, debug) {
     module: {
       rules: [
         {
+          test: /\.(?:woff2?|eot|ttf|svg)$/,
+          loader: 'file-loader',
+          options: {
+            name: path.relative(script.dest, 'font/[name].[ext]')
+          }
+        },
+        {
           test: /\.js$/,
           loader: 'babel-loader',
           options: {
@@ -29,6 +36,7 @@ module.exports = function (config, postcssConfig, debug) {
         },
         {
           test: /\.css$/,
+          include: new RegExp(assets.context), // 只针对项目资源目录
           use: [
             MiniCssExtractPlugin.loader,
             {
@@ -47,6 +55,14 @@ module.exports = function (config, postcssConfig, debug) {
               loader: 'postcss-loader',
               options: postcssConfig
             }
+          ]
+        },
+        {
+          test: /\.css$/,
+          exclude: new RegExp(assets.context), // 针对除项目资源以外的目录，例如加载node_modules或者element-ui的theme中的样式
+          use: [
+            MiniCssExtractPlugin.loader,
+            'css-loader'
           ]
         },
         {
