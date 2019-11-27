@@ -27,7 +27,11 @@ module.exports = {
     'import/no-extraneous-dependencies': OFF,
     'import/extensions': OFF,
     'import/no-unresolved': OFF,
-    'import/prefer-default-export': OFF
+    'import/prefer-default-export': OFF,
+    'vue/html-closing-bracket-newline': [ERROR, {
+      singleline: 'never',
+      multiline: 'never'
+    }]
   },
   env: {
     node: true,
