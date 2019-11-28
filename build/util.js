@@ -130,7 +130,7 @@ function checkVendor(output, assets) {
 
   if (!fs.existsSync(manifestPath)) {
     console.log('');
-    console.error(chalk.red('[Webpack] The vendor manifest is missing. Please run `npm run build`\n'));
+    console.error(chalk.red('[Webpack] The vendor manifest is missing. Please run `npm run vendor`\n'));
     return false;
   }
   
@@ -139,7 +139,7 @@ function checkVendor(output, assets) {
 
   if (!fs.existsSync(vendorPath)) {
     console.log('');
-    console.error(chalk.red('[Webpack] The vendor file is missing. Please run `npm run build`\n'));
+    console.error(chalk.red('[Webpack] The vendor file is missing. Please run `npm run vendor`\n'));
     return false;
   }
 
