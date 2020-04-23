@@ -7,7 +7,7 @@ const defaultConfig = require('./config.default');
 const argv = minimist(process.argv.slice(2));
 
 module.exports = _.mergeWith(
-  defaultConfig, 
+  defaultConfig,
   util.getUserConfig(argv.buildfile || path.resolve('build.config.js')),
-  (c1, c2) => Array.isArray(c1) ? c1.concat(c2) : void 0
+  (c1, c2) => (Array.isArray(c1) ? c1.concat(c2) : undefined)
 );

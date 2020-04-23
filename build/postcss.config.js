@@ -10,9 +10,9 @@ const cssnano = require('cssnano');
  * 匹配CSS Sprites 图片分组的正则
  * @type {RegExp}
  */
-const groupRE= /\?__group=([^\\/]+)$/;
+const groupRE = /\?__group=([^\\/]+)$/;
 
-module.exports = function (config, debug, imageWalker) {
+module.exports = function (config, debug) {
   const { output: { path: outputDir }, assets, assets: { context } } = config;
   const stylesheetPath = path.posix.join(outputDir, context, assets.style.dest);
   const spritePath = path.posix.join(outputDir, context, assets.image.dest);
@@ -21,7 +21,7 @@ module.exports = function (config, debug, imageWalker) {
   if (!referencePath.startsWith('/')) {
     referencePath = `/${referencePath}`;
   }
-  
+
   return {
     plugins: [
       atImport({
@@ -55,17 +55,19 @@ module.exports = function (config, debug, imageWalker) {
         },
         hooks: {
           onUpdateRule(rule, token, image) {
-            const { ratio, coords, spriteWidth, spriteHeight } = image;
+            const {
+              ratio, coords, spriteWidth, spriteHeight
+            } = image;
             const posX = -1 * Math.abs(coords.x / ratio);
             const posY = -1 * Math.abs(coords.y / ratio);
             const sizeX = spriteWidth / ratio;
             const sizeY = spriteHeight / ratio;
-            const spritePath = path.posix.join(referencePath, path.basename(image.spritePath));
+            const imageUrl = path.posix.join(referencePath, path.basename(image.spritePath));
 
             token.cloneAfter({
               type: 'decl',
               prop: 'background-image',
-              value: `url(${spritePath})`
+              value: `url(${imageUrl})`
             }).cloneAfter({
               prop: 'background-position',
               value: `${posX}px ${posY}px`
@@ -78,16 +80,16 @@ module.exports = function (config, debug, imageWalker) {
             const groups = [];
             const scaleFactors = [];
 
-            spritesheet.groups.forEach(group => {
+            spritesheet.groups.forEach((group) => {
               if (/^@\d+x$/.test(group)) {
                 scaleFactors.push(group);
               } else {
                 groups.push(group);
               }
             });
-            
-            const filename = groups.join('.') + scaleFactors.join('.') + '.' + spritesheet.extension;
-			      return path.join(opts.spritePath, filename);
+
+            const filename = `${groups.join('.') + scaleFactors.join('.')}.${spritesheet.extension}`;
+            return path.join(opts.spritePath, filename);
           }
         },
         filterBy(image) {
@@ -108,5 +110,5 @@ module.exports = function (config, debug, imageWalker) {
       }),
       cssnano()
     ])
-  }
-}
+  };
+};

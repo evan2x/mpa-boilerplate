@@ -220,7 +220,7 @@ module.exports = function (config, debug) {
       })
       // 过滤掉内嵌的资源
       // 若对同一资源的内嵌与引用次数不一致则不过滤
-        .pipe(filter(file => inline[file.relative] !== fileMap[file.relative]))
+        .pipe(filter((file) => inline[file.relative] !== fileMap[file.relative]))
         .pipe(gulp.dest(outputDir))
         .once('finish', () => {
         // 删除掉useref处理的资源父目录
@@ -286,27 +286,27 @@ module.exports = function (config, debug) {
    * @type {Task}
    */
   function replaceRefs() {
-    const script = `${path.dirname(assets.script.src)}/*${path.extname(assets.script.src)}`;
+    const scriptPath = `${path.dirname(assets.script.src)}/*${path.extname(assets.script.src)}`;
     const sourceGlobs = _.flatten([
-      script,
+      scriptPath,
       assets.style,
       assets.image,
       ...assets.copies
-    ].map(item => path.join(context, item.src || item)));
+    ].map((item) => path.join(context, item.src || item)));
     const manifest = util.createReplacementManifest(sourceGlobs, {
       cwd: path.resolve(outputDir),
       publicPath
     });
     const globs = _.flatten([
-      script,
+      scriptPath,
       assets.style,
       assets.template
-    ]).map(item => path.join(context, item.src || item));
-    
+    ]).map((item) => path.join(context, item.src || item));
+
     return gulp.src(globs, {
-        cwd: path.resolve(outputDir),
-        base: outputDir
-      })
+      cwd: path.resolve(outputDir),
+      base: outputDir
+    })
       .pipe(replace(manifest))
       .pipe(gulp.dest(outputDir));
   }

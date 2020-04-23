@@ -95,7 +95,7 @@ module.exports = function (config) {
    */
   function tmplRev() {
     const { globs, out } = resolveAsset(assets.template);
-    const extensions = _.flatten(util.extnameGlob(globs)).map(v => `.${v}`);
+    const extensions = _.flatten(util.extnameGlob(globs)).map((v) => `.${v}`);
 
     return gulp.src(globs)
       .pipe(revRewrite({

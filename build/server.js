@@ -21,7 +21,7 @@ function traverseObject(o, iterator) {
     return false;
   }
 
-  Object.keys(o).forEach(key => {
+  Object.keys(o).forEach((key) => {
     iterator(key, o[key]);
   });
 }
@@ -39,5 +39,5 @@ traverseObject(serverConfig.proxy, (key, value) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.info(`Server is running here: ${chalk.cyan(`http://127.0.0.1:${chalk.bold(PORT)}`)}`)
+  console.info(`Server is running here: ${chalk.cyan(`http://127.0.0.1:${chalk.bold(PORT)}`)}`);
 });

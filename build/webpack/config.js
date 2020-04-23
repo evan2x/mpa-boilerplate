@@ -90,11 +90,11 @@ module.exports = function (config, postcssConfig, debug) {
           },
           commonStyle: {
             name: script.commonChunkName,
-            test: m => {
+            test: (m) => {
               if (m.nameForCondition) {
                 const name = m.nameForCondition();
-                
-                return /\.css$/.test(name) || (/\.vue$/.test(name) && !/^javascript/.test(m.type))
+
+                return /\.css$/.test(name) || (/\.vue$/.test(name) && !/^javascript/.test(m.type));
               }
 
               return false;

@@ -24,7 +24,7 @@ function relPath(base, filePath) {
   return newPath;
 }
 
-const getManifestFile = opts => vinylFile.read(opts.path, opts).catch((error) => {
+const getManifestFile = (opts) => vinylFile.read(opts.path, opts).catch((error) => {
   if (error.code === 'ENOENT') {
     return new Vinyl(opts);
   }
@@ -37,12 +37,14 @@ module.exports = function (pth, opts) {
     pth = { path: pth };
   }
 
-  opts = Object.assign({
+  opts = {
     qs: false,
     path: 'rev-manifest.json',
     merge: false,
-    transformer: JSON
-  }, opts, pth);
+    transformer: JSON,
+    ...opts,
+    ...pth
+  };
 
   let manifest = {};
 

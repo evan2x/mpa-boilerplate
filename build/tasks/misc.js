@@ -16,10 +16,10 @@ module.exports = function (config) {
     const name = `${symbols.name}.js`;
     const symbolTmpl = path.resolve(__dirname, '../templates/svg-symbols.js');
     const tmpl = path.resolve(__dirname, '../templates/svg-symbols.html');
-    const SymbolFilter = filter(file => /\.js$/.test(file.path), {
+    const SymbolFilter = filter((file) => /\.js$/.test(file.path), {
       restore: true
     });
-    const HTMLFilter = filter(file => /\.html$/.test(file.path), {
+    const HTMLFilter = filter((file) => /\.html$/.test(file.path), {
       restore: true
     });
 
@@ -95,17 +95,13 @@ module.exports = function (config) {
 
         // 生成iconfont样式
         gulp.src(tmpl.css)
-          .pipe(consolidate('lodash', Object.assign({}, data, {
-            fontPath
-          })))
+          .pipe(consolidate('lodash', { ...data, fontPath }))
           .pipe(rename(`${font.name}.css`))
           .pipe(gulp.dest(font.style));
 
         // 生成iconfont文档样式
         gulp.src(tmpl.css)
-          .pipe(consolidate('lodash', Object.assign({}, data, {
-            fontPath: ''
-          })))
+          .pipe(consolidate('lodash', { ...data, fontPath: '' }))
           .pipe(rename('style.css'))
           .pipe(gulp.dest(destDoc));
 

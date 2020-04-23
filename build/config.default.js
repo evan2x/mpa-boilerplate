@@ -16,7 +16,7 @@ module.exports = {
     path: './dist',
     publicPath: ''
   },
-  /** 
+  /**
    * 内置的node服务
    */
   server: {
@@ -42,7 +42,7 @@ module.exports = {
      * 代理配置，与webpack-dev-server的proxy配置相同
      * @see https://webpack.js.org/configuration/dev-server/#devserverproxy
      */
-    proxy: {} 
+    proxy: {}
   },
   /**
    * 资源配置

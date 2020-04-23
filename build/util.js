@@ -9,6 +9,8 @@ const glob2base = require('glob2base');
 const isValidGlob = require('is-valid-glob');
 const _ = require('lodash');
 
+/* eslint-disable import/no-dynamic-require, no-console, global-require */
+
 /**
  * 读取用户配置
  * @param {String} filepath 配置文件路径
@@ -33,7 +35,7 @@ function getUserConfig(filepath) {
       log('Using buildfile %s', chalk.magenta(tildify(filepath)));
 
       return config;
-    } catch (_) {}
+    } catch {}
   }
 
   return {};
@@ -41,8 +43,8 @@ function getUserConfig(filepath) {
 
 /**
  * 遍历globs
- * @param {String|Array<String>} globs 
- * @param {Function} callback 
+ * @param {String|Array<String>} globs
+ * @param {Function} callback
  * @return {String|Array<String>}
  */
 function traverseGlob(globs, callback) {
@@ -59,12 +61,12 @@ function traverseGlob(globs, callback) {
 
 /**
  * 拼接 context 和 globs
- * @param {String} context 
+ * @param {String} context
  * @param {String|Array<String>} globs
  * @return {String|Array<String>}
  */
 function joinContextToGlob(context, globs) {
-  return traverseGlob(globs, pattern => path.posix.join(context, pattern));
+  return traverseGlob(globs, (pattern) => path.posix.join(context, pattern));
 }
 
 /**
@@ -73,19 +75,19 @@ function joinContextToGlob(context, globs) {
  * @return {String|Array<String>}
  */
 function dirnameGlob(globs) {
-  return traverseGlob(globs, pattern => path.posix.dirname(pattern));
+  return traverseGlob(globs, (pattern) => path.posix.dirname(pattern));
 }
 
 /**
  * 获取globs的后缀
- * @param {*} globs 
+ * @param {*} globs
  * @param {String|Array<String>} globs
  * @return {String|Array<String>}
  */
 function extnameGlob(globs) {
-  return traverseGlob(globs, pattern => (
+  return traverseGlob(globs, (pattern) => (
     path.posix.extname(pattern).slice(1).replace(/^{+|}+$/g, '').split(',')
-  ))
+  ));
 }
 
 /**
@@ -109,20 +111,20 @@ function assetResolver(context, output, isRev = false) {
     const { src, dest } = asset;
 
     if (src == null || dest == null) {
-      throw new Error('Invalid src or dest')
+      throw new Error('Invalid src or dest');
     }
-    
+
     return {
       globs: joinContextToGlob(sourceContext, src),
       out: path.posix.join(output, context, dest)
-    }
-  }
+    };
+  };
 }
 
 /**
  * 检查vendor包是否存在
- * @param {String} output 
- * @param {Object} assets 
+ * @param {String} output
+ * @param {Object} assets
  * @return {Boolean}
  */
 function checkVendor(output, assets) {
@@ -133,7 +135,7 @@ function checkVendor(output, assets) {
     console.error(chalk.red('[Webpack] The vendor manifest is missing. Please run `npm run vendor`\n'));
     return false;
   }
-  
+
   const manifest = require(manifestPath);
   const vendorPath = path.resolve(output, assets.dest, `${manifest.name}.js`);
 
@@ -152,17 +154,17 @@ function checkVendor(output, assets) {
  * @return {Function} entry2name
  */
 function getNameByEntry(globs) {
-  const baseList = traverseGlob(globs, pattern => glob2base(new glob.Glob(pattern)));
+  const baseList = traverseGlob(globs, (pattern) => glob2base(new glob.Glob(pattern)));
 
   return (entry) => {
     let base = baseList;
 
     if (Array.isArray(baseList)) {
-      base = baseList.find(b => name.indexOf(b) === 0);
+      base = baseList.find((b) => entry.indexOf(b) === 0);
     }
 
     return path.relative(base, entry.replace(path.extname(entry), ''));
-  }
+  };
 }
 
 /**
@@ -177,7 +179,7 @@ function webpackEntries(globs, baseModules = []) {
   const entry2name = getNameByEntry(globs);
 
   return entries.reduce((acc, entry) => {
-    name = entry2name(entry);
+    const name = entry2name(entry);
 
     acc[name] = baseModules.concat([path.resolve(entry)]);
     return acc;
@@ -186,8 +188,8 @@ function webpackEntries(globs, baseModules = []) {
 
 /**
  * webpack stats 处理器
- * @param {Error} err 
- * @param {Object} stats 
+ * @param {Error} err
+ * @param {Object} stats
  * @return {Promise}
  */
 function webpackHandler(err, stats, watch = false) {
@@ -201,7 +203,7 @@ function webpackHandler(err, stats, watch = false) {
       errorDetails: false,
       moduleTrace: false
     });
-  
+
     if (stats.hasErrors()) {
       console.error(chalk.redBright(info.errors), '\n');
       reject(info.errors);
@@ -211,7 +213,7 @@ function webpackHandler(err, stats, watch = false) {
     if (stats.hasWarnings()) {
       console.warn(chalk.yellowBright(info.warnings), '\n');
     }
-    
+
     if (!watch) {
       console.info(stats.toString({
         modules: false,
@@ -226,7 +228,7 @@ function webpackHandler(err, stats, watch = false) {
 
 /**
  * 获取多个路径的相同父目录
- * @param {Array} filepaths 
+ * @param {Array} filepaths
  * @return {String}
  */
 function sameParentPath(filepaths) {
@@ -238,7 +240,7 @@ function sameParentPath(filepaths) {
 
     for (let i = 0; i < casual.length; i++) {
       tester += `${casual[i]}${path.sep}`;
-  
+
       for (let j = 0; j < filepaths.length; j++) {
         if (!filepaths[j].startsWith(tester)) {
           return parent;
@@ -254,11 +256,11 @@ function sameParentPath(filepaths) {
 
 /**
  * 创建一个用于替换前缀的资源表
- * @param {Array} globs 
- * @param {Object} options 
- * @param {String} options.context 
+ * @param {Array} globs
+ * @param {Object} options
+ * @param {String} options.context
  * @param {String} options.publicPath
- * @return {Object} 
+ * @return {Object}
  * @example
  * {
  *   "assets/js/main.js": "${publicPath}/assets/js/main.js"
@@ -271,11 +273,10 @@ function createReplacementManifest(globs, {
   if (publicPath === '' || publicPath == null) return {};
 
   return globs.reduce((acc, cur) => (
-    acc.concat(glob.sync(cur, { 
-      nodir: true, 
+    acc.concat(glob.sync(cur, {
+      nodir: true,
       cwd
-    })
-  )), []).reduce((acc, cur) => {
+    }))), []).reduce((acc, cur) => {
     acc[cur] = path.posix.join(publicPath, cur);
     return acc;
   }, {});
@@ -283,7 +284,7 @@ function createReplacementManifest(globs, {
 
 /**
  * 根据文件路径创建一个空文件
- * @param {String} filepath 
+ * @param {String} filepath
  * @return {Boolean}
  */
 function createEmptyFile(filepath) {
@@ -295,7 +296,7 @@ function createEmptyFile(filepath) {
     }
 
     fs.writeFileSync(filepath, '');
-  } catch (_) {
+  } catch {
     return false;
   }
 
