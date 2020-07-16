@@ -16,6 +16,7 @@ const childProcess = require('child_process');
 const useref = require('gulp-useref');
 const inlinesource = require('gulp-inline-source');
 const filter = require('gulp-filter');
+const nunjucks = require('gulp-nunjucks');
 const through = require('through2');
 const del = require('del');
 const terser = require('terser');
@@ -164,6 +165,7 @@ module.exports = function (config, debug) {
    */
   function tmpl(done) {
     const { globs, out } = resolveAsset(assets.template);
+    const { staticCompiler } = assets.template;
     const files = [];
     const inline = {};
     const prefix = path.resolve(context);
@@ -250,6 +252,7 @@ module.exports = function (config, debug) {
     };
 
     gulp.src(globs)
+      .pipe(gulpif(staticCompiler, nunjucks.compile()))
       .pipe(debug ? useref(userefOptions) : useref(userefOptions, optimizeAssets))
       .pipe(gulpif(/\.(?:css|js)$/, through.obj(function (file, enc, next) {
         files.push(file.relative);
@@ -370,7 +373,7 @@ module.exports = function (config, debug) {
 
     watch(() => {
       if (!started) {
-        childProcess.spawn('node', ['build/server.js'], {
+        childProcess.spawn('node', ['scripts/server.js'], {
           stdio: 'inherit'
         });
         started = true;

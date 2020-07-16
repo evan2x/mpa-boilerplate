@@ -24,9 +24,9 @@ npm run iconfont:gen
 
 ## 配置项
 
-完整的配置项请参考[build/config.default.js](https://github.com/evan2x/mpa-boilerplate/blob/master/build/config.default.js)，该文件中的所有配置均为默认值，如果用户需要自定义配置，请在项目目录下创建`build.config.js`文件，此文件中的配置会与`默认配置`进行合并。
+完整的配置项请参考[scripts/config.default.js](https://github.com/evan2x/mpa-boilerplate/blob/master/scripts/config.default.js)，该文件中的所有配置均为默认值，如果用户需要自定义配置，请在项目目录下创建`build.config.js`文件，此文件中的配置会与`默认配置`进行合并。
 
-**以下的例子均配置在`build.config.js`文件中，你不应该修改`build/config.default.js`文件。**
+**以下的例子均配置在`build.config.js`文件中，你不应该修改`scripts/config.default.js`文件。**
 
 ### output 配置
 
@@ -48,17 +48,12 @@ module.exports = {
 
 ### server 配置
 
-启动默认的开发服务器，该服务器仅用于访问静态资源以及代理接口。如果你的模版不是静态的HTML，而是语言相关的模版，请不要使用该服务，因为其不具备模版解析功能。
+启动默认的开发服务器，当开启[模板静态编译](#模板静态编译)时将使用nunjucks对模板进行编译输出，当关闭[模板静态编译](#模板静态编译)时仅输出静态HTML文件。
 
 ```js
 module.exports = {
   server: {
     port: 8060,
-    view: 'views/',
-    public: {
-      '/assets': 'assets/',
-      '/dist/assets': 'dist/assets/'
-    },
     proxy: {} 
   }
 }
@@ -67,13 +62,11 @@ module.exports = {
 以上为默认配置项，您可以在`build.config.js`中进行修改
 
 * `server.port` 服务的端口号
-* `server.view` 该服务访问的模版目录
-* `server.public` 公共资源访问的路径与目录的映射关系
 * `server.proxy` 代理配置，与webpack-dev-server的proxy配置一致，具体使用方式请点击这里[proxy](https://webpack.js.org/configuration/dev-server/#devserverproxy)
 
 ### assets 配置
 
-以下是assets中相关的配置，接下来会着重介绍其中一些关键的配置项。
+以下是assets中相关的配置，接下来会重点介绍其中一些关键的配置项。
 
 ```js
 module.exports = {
@@ -84,7 +77,7 @@ module.exports = {
     },
     // 静态资源的上下文，默认是 `assets`目录
     context: './assets',
-    // 模版相关配置
+    // 模板相关配置
     template: {
       // ...
     },
@@ -269,9 +262,9 @@ module.exports = {
 
 **这两个命令会在项目目录下生成`docs`目录用于存放图标的使用文档。**
 
-## 模版
+## 模板
 
-你可以随意使用如：`Velocity`、`Freemarker`、`Nunjucks`、`Pug`、`Jinja2` 等等模版引擎，由于模版的多样性导致我们无法动态的为模版插入其依赖的样式与脚本，所以我们需要使用[useref](https://github.com/jonkemp/useref)的语法对资源的引入进行管理，接下来将用`Velocity`模版作为例子：
+你可以随意使用如：`Velocity`、`Freemarker`、`Nunjucks`、`Pug`、`Jinja2` 等等模板引擎，由于模板的多样性导致我们无法动态的为模板插入其依赖的样式与脚本，所以我们需要使用[useref](https://github.com/jonkemp/useref)的语法对资源的引入进行管理，接下来将用`Velocity`模板作为例子：
 
 `views/layout.vm`
 ```html
@@ -337,7 +330,7 @@ module.exports = {
 #end
 ```
 
-在以上模版中我们看到许多的
+在以上模板中我们看到许多的
 
 ```
 <!-- build:<type>(alternate search path) <path> <parameters> -->
@@ -355,7 +348,78 @@ module.exports = {
 <!-- endbuild -->
 ```
 
-它将被内嵌到模版中，避免了在移动端等弱网环境下请求不必要的小文件带来的高延迟问题。
+它将被内嵌到模板中，避免了在移动端等弱网环境下请求不必要的小文件带来的高延迟问题。
+
+## 模板静态编译
+
+当开发静态页面时，由于无法像模板一样支持复用代码片段，因此增加了[nunjucks](https://mozilla.github.io/nunjucks/)模板用于实现静态编译。
+
+你可以将`assets.template.staticCompiler`设置为`true`即可使用模板静态编译带来的便利。
+
+**由于模板静态编译是在`npm run build`时才会生效，所以该功能在开发阶段中需要使用内置的server，即使用`npm run dev`启动项目，当然你也可以自己实现一个渲染nunjucks模板的`Node.js Server*`**
+
+以下是一个通过[nunjucks](https://mozilla.github.io/nunjucks/)的[Template Inheritance](https://mozilla.github.io/nunjucks/templating.html#template-inheritance)简化静态项目的示例：
+
+`views/layout.html`
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="format-detection" content="telephone=no, email=no">
+  <!-- build:css /assets/css/base.css -->
+  <link rel="stylesheet" href="/assets/css/common/reset.css">
+  <link rel="stylesheet" href="/assets/css/iconfont.css">
+  <link rel="stylesheet" href="/dist/assets/css/common/base.css">
+  <link rel="stylesheet" href="/dist/assets/css/common.css">
+  <!-- endbuild -->
+  {% block head %}
+  {% endblock %}
+</head>
+<body>
+  {% block body %}
+  {% endblock %}
+  <!-- build:js /assets/js/runtime.js -->
+  <script src="/dist/assets/js/webpack-runtime.js"></script>
+  <!-- endbuild -->
+  <!-- build:js /assets/js/vendor.js -->
+  <script src="/dist/assets/js/vendor.js"></script>
+  <!-- endbuild -->
+  <!-- build:js /assets/js/common.js -->
+  <script src="/dist/assets/js/common.js"></script>
+  <!-- endbuild -->
+  {% block bodyScript %}
+  {% endblock %}
+</body>
+</html>
+```
+
+`views/index.html`
+
+```html
+{% extends "./layout.html" %}
+
+{% block head %}
+<!-- build:css /assets/css/index.css inline -->
+<link rel="stylesheet" href="/dist/assets/css/index.css">
+<!-- endbuild -->
+{% endblock %}
+
+{% block body %}
+<div class="container" id="app" v-cloak>
+  <h1>{{title}}</h1>
+  <example></example>
+</div>
+{% endblock %}
+
+{% block bodyScript %}
+<!-- build:js /assets/js/index/main.js inline -->
+<script src="/dist/assets/js/index/main.js"></script>
+<!-- endbuild -->
+{% endblock %}
+```
 
 ## CSS Sprites
 

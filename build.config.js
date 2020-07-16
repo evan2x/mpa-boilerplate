@@ -15,6 +15,9 @@ module.exports = {
     }
   },
   assets: {
+    template: {
+      staticCompiler: true
+    },
     script: {
       vendor: {
         modules: ['axios', 'vue']

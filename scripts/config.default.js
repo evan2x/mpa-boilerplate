@@ -18,6 +18,7 @@ module.exports = {
   },
   /**
    * 内置的node服务
+   * 默认允许访问assets以及输出目录的所有资源
    */
   server: {
     /**
@@ -25,19 +26,6 @@ module.exports = {
      * @type {Number}
      */
     port: 8060,
-    /**
-     * 模版目录
-     * @type {String}
-     */
-    view: 'views/',
-    /**
-     * 公共资源访问路径与目录映射
-     * @type {String}
-     */
-    public: {
-      '/assets': 'assets/',
-      '/dist/assets': 'dist/assets/'
-    },
     /**
      * 代理配置，与webpack-dev-server的proxy配置相同
      * @see https://webpack.js.org/configuration/dev-server/#devserverproxy
@@ -80,6 +68,11 @@ module.exports = {
      * @type {Object}
      */
     template: {
+      /**
+       * 使用nunjucks静态编译模版
+       * @type {Boolean}
+       */
+      staticCompiler: false,
       src: '../views/**/*.{vm,ftl,html}',
       dest: '../views/'
     },

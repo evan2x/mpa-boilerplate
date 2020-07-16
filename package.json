@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "A boilerplate for multi-page application",
   "scripts": {
-    "exec": "gulp --cwd=./ --gulpfile build/gulpfile.js",
+    "exec": "gulp --cwd=./ --gulpfile scripts/gulpfile.js",
     "clean": "npm run exec clean",
     "vendor": "npm run exec vendor",
     "symbols:gen": "npm run exec symbols:gen",
@@ -12,7 +12,7 @@
     "build": "cross-env NODE_ENV=production npm run exec build",
     "watch": "cross-env-shell NODE_ENV=development \"npm run clean && npm run vendor && npm run exec watch\"",
     "dev": "cross-env-shell NODE_ENV=development \"npm run clean && npm run vendor && npm run exec server\"",
-    "lint-build": "eslint --fix --ext .js build/",
+    "lint-scripts": "eslint --fix --ext .js scripts/",
     "lint": "eslint --fix --ext .js,.vue assets/"
   },
   "engines": {
@@ -86,6 +86,7 @@
     "gulp-if": "^3.0.0",
     "gulp-imagemin": "^6.2.0",
     "gulp-inline-source": "^4.0.0",
+    "gulp-nunjucks": "^5.0.1",
     "gulp-postcss": "^8.0.0",
     "gulp-rename": "^1.4.0",
     "gulp-rev": "^9.0.0",
@@ -101,6 +102,7 @@
     "mini-css-extract-plugin": "^0.8.2",
     "minimist": "^1.2.5",
     "mkdirp": "^0.5.5",
+    "nunjucks": "^3.2.1",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "postcss-import": "^12.0.1",
     "postcss-loader": "^3.0.0",

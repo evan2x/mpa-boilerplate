@@ -1,36 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <meta name="format-detection" content="telephone=no, email=no">
-  <title>Examples</title>
-  <!-- build:css /assets/css/base.css -->
-  <link rel="stylesheet" href="/assets/css/common/reset.css">
-  <link rel="stylesheet" href="/assets/css/iconfont.css">
-  <link rel="stylesheet" href="/dist/assets/css/common/base.css">
-  <link rel="stylesheet" href="/dist/assets/css/common.css">
-  <!-- endbuild -->
-  <!-- build:css /assets/css/index.css inline -->
-  <link rel="stylesheet" href="/dist/assets/css/index.css">
-  <!-- endbuild -->
-</head>
-<body>
-  <div class="container" id="app" v-cloak>
-    <h1>{{title}}</h1>
-    <example></example>
-  </div>
-  <!-- build:js /assets/js/runtime.js -->
-  <script src="/dist/assets/js/webpack-runtime.js"></script>
-  <!-- endbuild -->
-  <!-- build:js /assets/js/vendor.js -->
-  <script src="/dist/assets/js/vendor.js"></script>
-  <!-- endbuild -->
-  <!-- build:js /assets/js/common.js -->
-  <script src="/dist/assets/js/common.js"></script>
-  <!-- endbuild -->
-  <!-- build:js /assets/js/index/main.js inline -->
-  <script src="/dist/assets/js/index/main.js"></script>
-  <!-- endbuild -->
-</body>
-</html>
+{% extends "./layout.html" %}
+
+{% block head %}
+<!-- build:css /assets/css/index.css inline -->
+<link rel="stylesheet" href="/dist/assets/css/index.css">
+<!-- endbuild -->
+{% endblock %}
+
+{% block body %}
+<div class="container" id="app" v-cloak>
+  <h1>{{title}}</h1>
+  <example></example>
+</div>
+{% endblock %}
+
+{% block bodyScript %}
+<!-- build:js /assets/js/index/main.js inline -->
+<script src="/dist/assets/js/index/main.js"></script>
+<!-- endbuild -->
+{% endblock %}

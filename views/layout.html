@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="format-detection" content="telephone=no, email=no">
+  <title>Examples</title>
+  <!-- build:css /assets/css/base.css -->
+  <link rel="stylesheet" href="/assets/css/common/reset.css">
+  <link rel="stylesheet" href="/assets/css/iconfont.css">
+  <link rel="stylesheet" href="/dist/assets/css/common/base.css">
+  <link rel="stylesheet" href="/dist/assets/css/common.css">
+  <!-- endbuild -->
+  {% block head %}
+  {% endblock %}
+</head>
+<body>
+  {% block body %}
+  {% endblock %}
+  <!-- build:js /assets/js/runtime.js -->
+  <script src="/dist/assets/js/webpack-runtime.js"></script>
+  <!-- endbuild -->
+  <!-- build:js /assets/js/vendor.js -->
+  <script src="/dist/assets/js/vendor.js"></script>
+  <!-- endbuild -->
+  <!-- build:js /assets/js/common.js -->
+  <script src="/dist/assets/js/common.js"></script>
+  <!-- endbuild -->
+  {% block bodyScript %}
+  {% endblock %}
+</body>
+</html>
